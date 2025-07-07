@@ -1,3 +1,5 @@
+![Hiberbull Logo](hiberbull_photo.png)
+
 # 🐂 HiberBull - Meme Coin on Base
 
 **HiberBull (HIBER)** is a meme coin deployed on the [Base](https://base.org) Layer 2 blockchain.  
