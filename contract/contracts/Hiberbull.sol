@@ -12,7 +12,8 @@ contract Hiberbull is ERC20, Ownable {
     address public constant burnAddress =
         0x000000000000000000000000000000000000dEaD;
     uint256 public burnFee = 1; // 1%
-    uint256 public liquidityFee = 4; // 4%
+    uint256 public liquidityFee = 3; // 3%
+    uint256 public marketingfee = 1; // 1%
     address _liquiditywallet;
     address _marketingwallet;
     mapping(address => bool) internal tax_free;
