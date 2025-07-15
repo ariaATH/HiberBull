@@ -14,9 +14,11 @@ contract Hiberbull is ERC20, Ownable {
     uint256 public burnFee = 1; // 1%
     uint256 public liquidityFee = 3; // 3%
     uint256 public marketingfee = 1; // 1%
-    address _liquiditywallet;
-    address _marketingwallet;
-    mapping(address => bool) internal tax_free;
+    uint256 public MaxTotaltax;
+    uint256 public totalTax = 0; // total tax
+    address _liquiditywallet; // liquidity wallet address
+    address _marketingwallet; // marketing wallet address
+    mapping(address => bool) internal tax_free; // tax-free addresses
 
     constructor(
         address _liquiditywallett,
@@ -25,6 +27,10 @@ contract Hiberbull is ERC20, Ownable {
         _liquiditywallet = _liquiditywallett;
         _marketingwallet = _marketingwallett;
         uint256 totalSupply = 10000000000 * 10 ** decimals();
+        MaxTotaltax = (totalSupply * 30) / 100; // 30% of total supply
+        tax_free[msg.sender] = true; // owner is tax free
+        tax_free[_liquiditywallet] = true; // liquidity wallet is tax free
+        tax_free[_marketingwallet] = true; // marketing wallet is tax free
         _mint(address(this), totalSupply); // mint all to contract first
         _transfer(address(this), burnAddress, (20 * totalSupply) / 100); // send 20% to burn address
         _transfer(address(this), _liquiditywallet, (totalSupply * 70) / 100); // send 70% to liquidity wallet
