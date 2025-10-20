@@ -1,4 +1,4 @@
-<img src="hiberbull_photo.png" width="50%" />
+<img src="logo/LOgo.png" width="50%" />
 
 # 🐂 HiberBull - Meme Coin on Base
 
