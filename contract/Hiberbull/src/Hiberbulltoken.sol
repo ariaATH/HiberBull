@@ -35,4 +35,26 @@ contract Hiberbulltoken is ERC20, Ownable {
         }
         return true;
     }
+
+    // Override transferFrom function to include tax
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public override returns (bool) {
+        address spender = msg.sender;
+        _spendAllowance(from, spender, amount);
+        if (!wallettaxfree[from]) {
+            _transfer(from, to, amount - ((amount * taxfee) / 100));
+            _transfer(from, taxWallet, (amount * taxfee) / 100);
+        } else {
+            _transfer(from, to, amount);
+        }
+        return true;
+    }
+
+    // Set wallet tax-free status
+    function Settaxfree(address wallet) external onlyOwner {
+        wallettaxfree[wallet] = true;
+    }
 }
