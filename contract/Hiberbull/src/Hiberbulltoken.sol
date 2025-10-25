@@ -12,10 +12,9 @@ contract Hiberbulltoken is ERC20, Ownable {
     mapping(address => bool) private wallettaxfree;
 
     constructor(
-        address _taxWallet,
         uint16 _taxfee
     ) ERC20("Hiberbull", "HIBER") Ownable(msg.sender) {
-        taxWallet = _taxWallet;
+        taxWallet = address(this);
         taxfee = _taxfee;
         wallettaxfree[msg.sender] = true;
         wallettaxfree[taxWallet] = true;
@@ -59,7 +58,7 @@ contract Hiberbulltoken is ERC20, Ownable {
     }
 
     // Set wallet tax-not-free status
-    function Settaxnotfreeaddress(address wallet) external onlyOwner {
+    function SettaxNotfreeaddress(address wallet) external onlyOwner {
         wallettaxfree[wallet] = false;
     }
 }
