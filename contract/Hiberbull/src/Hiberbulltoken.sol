@@ -75,3 +75,4 @@ contract Hiberbulltoken is ERC20, Ownable {
         wallettaxfree[wallet] = false;
     }
 }
+//Finally, problems are solved and I’m starting
