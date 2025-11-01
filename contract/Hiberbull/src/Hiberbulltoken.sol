@@ -2,14 +2,14 @@
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Staketoken.sol";
+import "./Stakeholders.sol";
 
 contract Hiberbulltoken is ERC20, Ownable {
-    Staketoken private staketoken;
+    Stakeholders private stakeholders;
     // Tax fee and wallet address
     uint16 private taxfee;
     // Tax wallet address
-    address private taxWallet = staketoken.getstakingWallet();
+    address private taxWallet = stakeholders.getstakingWallet();
     // Wallet tax-free status
     mapping(address => bool) private wallettaxfree;
 
