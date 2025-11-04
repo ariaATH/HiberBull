@@ -33,7 +33,8 @@ contract Stakeholders is Ownable {
         if(token.balanceOf(msg.sender) < amount) {
             revert NotEnoughTokens();
         }
-        Hiberbulltoken.
+        Hiberbulltoken.Settaxfreeaddress(msg.sender);
+        token.transferFrom(msg.sender, stakingWallet, amount);
 
 
         
