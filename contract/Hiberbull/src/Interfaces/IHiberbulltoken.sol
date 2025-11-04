@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface IHiberbullToken {
   /// @notice Transfers tokens to a specified address
@@ -15,5 +16,9 @@ interface IHiberbullToken {
 
    /// @notice Returns the remaining number of tokens that a spender is allowed to withdraw from the owner's account
    function allowance(address owner, address spender) external view returns (uint256);
+   /// @notice Sets the tax-free address
+   function Settaxfreeaddress(address wallet) external onlyOwner ; 
+   /// @notice Sets the tax-not-free address
+   function SettaxNotfreeaddress(address wallet) external onlyOwner 
 
 }
