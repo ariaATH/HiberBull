@@ -22,7 +22,13 @@ contract Hiberbulltoken is ERC20, Ownable {
         wallettaxfree[msg.sender] = true;
         wallettaxfree[taxWallet] = true;
         _mint(msg.sender, 1000000000 * 10 ** decimals());
+        uint256 burnamount  = (totalSupply()* 20)/100;
+        _burn(msg.sender, burnamount);
+        emit TokensBurned(msg.sender, burnamount);
     }
+
+    event TokensBurned(address indexed from, uint256 amount);
+
 
     event Transfercompleted(
         address indexed from,
@@ -77,4 +83,3 @@ contract Hiberbulltoken is ERC20, Ownable {
         wallettaxfree[wallet] = false;
     }
 }
-//Finally, problems are solved and I’m starting !
