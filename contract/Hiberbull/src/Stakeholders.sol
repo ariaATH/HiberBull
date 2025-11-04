@@ -25,10 +25,12 @@ contract Stakeholders is Ownable {
         token = IERC20(tokenAddress);
     }
 
-    function staketokenonemonth(uint256 amount) external {
+    function staketokenonemonth(uint256 amount) external{
         if(token.balanceOf(msg.sender) < amount) {
             revert NotEnoughTokens();
         }
+
+        
     }
 
 
