@@ -32,6 +32,8 @@ contract Stakeholders is Ownable {
 
     event TokensStaked(address indexed user, uint256 amount);
 
+    event ClaimedStakingRewards(address indexed user, uint256 amount);
+
     constructor(address tokenAddress , address stakeholdersAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
         token = IERC20(tokenAddress);
@@ -61,6 +63,7 @@ contract Stakeholders is Ownable {
                 uint256 reward = (stakedBalances[msg.sender]);
                 stakedBalances[msg.sender] = 0 ;
                 token.transferFrom(stakingWallet, msg.sender, reward);
+                emit ClaimedStakingRewards(msg.sender, reward);
             }
             else {
                 revert StakingtimeNotEnded(msg.sender);
