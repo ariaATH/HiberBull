@@ -20,6 +20,8 @@ contract Stakeholders is Ownable {
     uint256 private totalStaked;
     // Mapping of user addresses to their staked token balances
     mapping(address => uint256) private stakedBalances;
+    // Mapping of user addresses to their staking start times
+    mapping(address => uint256) private stakingStartTimes;
 
     error NotEnoughTokens();
 
@@ -34,7 +36,13 @@ contract Stakeholders is Ownable {
             revert NotEnoughTokens();
         }
         Hiberbulltoken.Settaxfreeaddress(msg.sender);
+        IHiberbulltoken.Settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
+        stakedBalances[msg.sender] += amount;
+        stakingStartTimes[msg.sender] = block.timestamp;
+        
+        
+
 
 
         
