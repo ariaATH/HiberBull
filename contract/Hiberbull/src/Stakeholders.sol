@@ -8,6 +8,7 @@ import "./Interfaces/IHiberbulltoken.sol";
 // stakeholders get 1/3 of the tax of transactions that monthly get from the users
 // The contract allows users to stake their tokens and earn rewards they stake token for 1 month and
 // they can claim their rewards after the staking period ends
+/// @notice 2/3 of tax we send to this contract 
 
 contract Stakeholders is Ownable {
     // The wallet where staked tokens are held
@@ -23,30 +24,38 @@ contract Stakeholders is Ownable {
     // Mapping of user addresses to their staking start times
     mapping(address => uint256) private stakingStartTimes;
 
-    error NotEnoughTokens();
+    error NotEnoughTokens(address user);
+
+    error StakingNotActive(address user);
+
+    event TokensStaked(address indexed user, uint256 amount);
 
     constructor(address tokenAddress , address stakeholdersAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
         token = IERC20(tokenAddress);
         Hiberbulltoken = IHiberbullToken(stakeholdersAddress);
     }
-
+    // Stake tokens for one month
     function staketokenonemonth(uint256 amount) external{
         if(token.balanceOf(msg.sender) < amount) {
-            revert NotEnoughTokens();
+            revert NotEnoughTokens(msg.sender);
         }
         Hiberbulltoken.Settaxfreeaddress(msg.sender);
         IHiberbulltoken.Settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
-        
-        
+        emit TokensStaked(msg.sender, amount);
 
-
-
-        
     }
 
+    function unstaketoken() external {
+        if (stakedBalances[msg.sender] == 0) {
+            revert StakingNotActive(msg.sender);
+        }
+        else {
+            if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
+                
+        }
 
 }
