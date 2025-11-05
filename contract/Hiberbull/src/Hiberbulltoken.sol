@@ -9,15 +9,14 @@ contract Hiberbulltoken is ERC20, Ownable {
     // Tax fee and wallet address
     uint16 private taxfee;
     // Tax wallet address
-    address private taxWallet = stakeholders.getstakingWallet();
+    address private immutable taxWallet ;
     // Wallet tax-free status
     mapping(address => bool) private wallettaxfree;
 
     constructor(
-        uint16 _taxfee
+        uint16 _taxfee , address _stakeholders
     ) ERC20("Hiberbull", "HIBER") Ownable(msg.sender) {
-        stakeholders = new Stakeholders();
-        taxWallet = stakeholders.getstakingWallet(); 
+        taxWallet = _stakeholders; 
         taxfee = _taxfee;
         wallettaxfree[msg.sender] = true;
         wallettaxfree[taxWallet] = true;
