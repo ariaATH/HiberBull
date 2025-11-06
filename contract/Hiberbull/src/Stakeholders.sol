@@ -28,11 +28,16 @@ contract Stakeholders is Ownable {
 
     error StakingNotActive(address user);
 
+    error StakingtimeNotEnded(address user);
+
     event TokensStaked(address indexed user, uint256 amount);
+
+    event ClaimedStakingRewards(address indexed user, uint256 amount);
 
     constructor(address tokenAddress , address stakeholdersAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
         token = IERC20(tokenAddress);
+        token.Settaxfreeaddress(address(this));
         Hiberbulltoken = IHiberbullToken(stakeholdersAddress);
     }
     // Stake tokens for one month
@@ -55,7 +60,13 @@ contract Stakeholders is Ownable {
         }
         else {
             if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
-                
+                uint256 reward = (stakedBalances[msg.sender]);
+                stakedBalances[msg.sender] = 0 ;
+                token.transferFrom(stakingWallet, msg.sender, reward);
+                emit ClaimedStakingRewards(msg.sender, reward);
+            }
+            else {
+                revert StakingtimeNotEnded(msg.sender);
             }
         }
     }
