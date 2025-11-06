@@ -10,25 +10,34 @@ contract Hiberbulltoken is ERC20, Ownable {
     uint16 private taxfee;
     // Tax wallet address
     address private immutable taxWallet ;
+    // Airdrop wallet address
+    address private immutable AirdropWallet;
     // Wallet tax-free status
     mapping(address => bool) private wallettaxfree;
 
     constructor(
-        uint16 _taxfee , address _stakeholders
+        uint16 _taxfee , address _stakeholders , address _airdropWallet
     ) ERC20("Hiberbull", "HIBER") Ownable(msg.sender) {
         taxWallet = _stakeholders; 
         taxfee = _taxfee;
+        AirdropWallet = _airdropWallet;
+        wallettaxfree[AirdropWallet] = true;
         wallettaxfree[msg.sender] = true;
         wallettaxfree[taxWallet] = true;
         _mint(msg.sender, 1000000000 * 10 ** decimals());
         uint256 burnamount  = (totalSupply()* 20)/100;
         _burn(msg.sender, burnamount);
         emit TokensBurned(msg.sender, burnamount);
+        transfer(AirdropWallet, (totalSupply() * 10) / 100); // Airdrop 10% of total supply
+        emit AirdropCompleted(AirdropWallet, (totalSupply() * 10) / 100);
+        
     }
-
+    // Events for burntoken
     event TokensBurned(address indexed from, uint256 amount);
+    // Events for airdrop
+    event AirdropCompleted(address indexed to, uint256 amount);
 
-
+    // Events for transfer
     event Transfercompleted(
         address indexed from,
         address indexed to,
