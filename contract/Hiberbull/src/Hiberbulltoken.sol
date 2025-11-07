@@ -49,13 +49,13 @@ contract Hiberbulltoken is ERC20, Ownable {
         uint256 amount
     ) public override returns (bool) {
         if (!wallettaxfree[msg.sender]) {
-            _transfer(msg.sender, to, amount - (((amount * taxfee) / 100)*2)/3); // brun 1 % of each txn
+            _transfer(msg.sender, to, amount - (((amount * taxfee) / 100)));
             emit Transfercompleted(
                 msg.sender,
                 to,
                 amount - ((amount * taxfee) / 100)
             );
-            _transfer(msg.sender, taxWallet, (amount * taxfee) / 100);
+            _transfer(msg.sender, taxWallet,(((amount * taxfee) / 100)*2)/3);
         } else {
             _transfer(msg.sender, to, amount);
             emit Transfercompleted(msg.sender, to, amount);
@@ -74,6 +74,7 @@ contract Hiberbulltoken is ERC20, Ownable {
         if (!wallettaxfree[from]) {
             _transfer(from, to, amount - ((amount * taxfee) / 100));
             _transfer(from, taxWallet, (((amount * taxfee) / 100)*2)/3); // burn 1% of each txn
+
         } else {
             _transfer(from, to, amount);
         }

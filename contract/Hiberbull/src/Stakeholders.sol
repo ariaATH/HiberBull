@@ -63,6 +63,7 @@ contract Stakeholders is Ownable {
             if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
                 uint256 reward = (stakedBalances[msg.sender]);
                 stakedBalances[msg.sender] = 0 ;
+                totalStaked -= reward;
                 token.transfer(msg.sender, reward);
                 emit ClaimedStakingRewards(msg.sender, reward);
             }
@@ -71,4 +72,5 @@ contract Stakeholders is Ownable {
             }
         }
     }
+
 }
