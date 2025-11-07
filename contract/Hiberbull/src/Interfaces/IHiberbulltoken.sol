@@ -17,8 +17,8 @@ interface IHiberbullToken {
    /// @notice Returns the remaining number of tokens that a spender is allowed to withdraw from the owner's account
    function allowance(address owner, address spender) external view returns (uint256);
    /// @notice Sets the tax-free address
-   function Settaxfreeaddress(address wallet) external onlyOwner ; 
+   function settaxfreeaddress(address wallet) external ; 
    /// @notice Sets the tax-not-free address
-   function SettaxNotfreeaddress(address wallet) external onlyOwner 
+   function settaxNotfreeaddress(address wallet) external  ;
 
 }

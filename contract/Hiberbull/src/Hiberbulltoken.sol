@@ -81,12 +81,12 @@ contract Hiberbulltoken is ERC20, Ownable {
     }
 
     // Set wallet tax-free status
-    function Settaxfreeaddress(address wallet) external onlyOwner {
+    function settaxfreeaddress(address wallet) external onlyOwner {
         wallettaxfree[wallet] = true;
     }
 
     // Set wallet tax-not-free status
-    function SettaxNotfreeaddress(address wallet) external onlyOwner {
+    function settaxNotfreeaddress(address wallet) external onlyOwner {
         wallettaxfree[wallet] = false;
     }
 }
