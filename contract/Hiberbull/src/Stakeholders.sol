@@ -47,6 +47,7 @@ contract Stakeholders is Ownable {
         }
         Hiberbulltoken.settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
+        totalStaked += amount;
         Hiberbulltoken.settaxNotfreeaddress(msg.sender);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
