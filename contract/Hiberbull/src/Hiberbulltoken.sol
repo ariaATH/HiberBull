@@ -5,8 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Interfaces/IStakeholders.sol";
 
 contract Hiberbulltoken is ERC20, Ownable {
-    IStakeholders private stakeholders;
-    // Tax fee and wallet address
+    // Tax fee
     uint16 private taxfee;
     // Tax wallet address
     address private immutable taxWallet ;
