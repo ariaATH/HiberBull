@@ -34,19 +34,19 @@ contract Stakeholders is Ownable {
 
     event ClaimedStakingRewards(address indexed user, uint256 amount);
 
-    constructor(address tokenAddress , address stakeholdersAddress) Ownable(msg.sender) {
+    constructor(address tokenAddress , address HiberbulltokenAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
+        Hiberbulltoken = IHiberbullToken(HiberbulltokenAddress);
         token = IERC20(tokenAddress);
-        token.Settaxfreeaddress(address(this));
-        Hiberbulltoken = IHiberbullToken(stakeholdersAddress);
+        Hiberbulltoken.settaxfreeaddress(address(this));
     }
     // Stake tokens for one month
     function staketokenonemonth(uint256 amount) external{
         if(token.balanceOf(msg.sender) < amount) {
             revert NotEnoughTokens(msg.sender);
         }
-        Hiberbulltoken.Settaxfreeaddress(msg.sender);
-        IHiberbulltoken.Settaxfreeaddress(msg.sender);
+        Hiberbulltoken.settaxfreeaddress(msg.sender);
+        Hiberbulltoken.settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
