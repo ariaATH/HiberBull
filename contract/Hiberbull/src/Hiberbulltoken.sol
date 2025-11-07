@@ -9,6 +9,7 @@ contract Hiberbulltoken is ERC20, Ownable {
     uint16 private taxfee;
     // Tax wallet address
     address private immutable taxWallet ;
+    uint256 private totaltaxmonthly;
     // Airdrop wallet address
     address private immutable AirdropWallet;
     // Wallet tax-free status
@@ -50,12 +51,14 @@ contract Hiberbulltoken is ERC20, Ownable {
     ) public override returns (bool) {
         if (!wallettaxfree[msg.sender]) {
             _transfer(msg.sender, to, amount - (((amount * taxfee) / 100)));
+            uint256 _totaltax = (((amount * taxfee) / 100)*2)/3;
+            totaltaxmonthly += _totaltax;
             emit Transfercompleted(
                 msg.sender,
                 to,
                 amount - ((amount * taxfee) / 100)
             );
-            _transfer(msg.sender, taxWallet,(((amount * taxfee) / 100)*2)/3);
+            _transfer(msg.sender, taxWallet, _totaltax );
         } else {
             _transfer(msg.sender, to, amount);
             emit Transfercompleted(msg.sender, to, amount);
@@ -74,11 +77,18 @@ contract Hiberbulltoken is ERC20, Ownable {
         if (!wallettaxfree[from]) {
             _transfer(from, to, amount - ((amount * taxfee) / 100));
             _transfer(from, taxWallet, (((amount * taxfee) / 100)*2)/3); // burn 1% of each txn
+            totaltaxmonthly += (((amount * taxfee) / 100)*2)/3;
 
         } else {
             _transfer(from, to, amount);
         }
         return true;
+    }
+    // owner should call this function for get total tax collected 
+    function getTotalTaxCollected() external onlyOwner returns (uint256){
+        uint256 _tot = totaltaxmonthly;
+        totaltaxmonthly = 0 ;
+        return _tot;
     }
 
     // Set wallet tax-free status
@@ -90,4 +100,6 @@ contract Hiberbulltoken is ERC20, Ownable {
     function settaxNotfreeaddress(address wallet) external onlyOwner {
         wallettaxfree[wallet] = false;
     }
+
+
 }
