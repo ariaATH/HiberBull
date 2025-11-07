@@ -46,8 +46,8 @@ contract Stakeholders is Ownable {
             revert NotEnoughTokens(msg.sender);
         }
         Hiberbulltoken.settaxfreeaddress(msg.sender);
-        Hiberbulltoken.settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
+        Hiberbulltoken.settaxNotfreeaddress(msg.sender);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
         emit TokensStaked(msg.sender, amount);
@@ -62,7 +62,7 @@ contract Stakeholders is Ownable {
             if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
                 uint256 reward = (stakedBalances[msg.sender]);
                 stakedBalances[msg.sender] = 0 ;
-                token.transferFrom(stakingWallet, msg.sender, reward);
+                token.transfer(msg.sender, reward);
                 emit ClaimedStakingRewards(msg.sender, reward);
             }
             else {
