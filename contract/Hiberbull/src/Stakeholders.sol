@@ -37,7 +37,7 @@ contract Stakeholders is Ownable {
     error StakingtimeNotEnded(address user);
 
     modifier timerewardpass() {
-        require(lastRewardTime + 30 days <= block.timestamp, "Staking period not ended");
+        require(block.timestamp >= lastRewardTime + 30 days, "Staking period not ended");
         _;
     }
 
@@ -66,11 +66,9 @@ contract Stakeholders is Ownable {
         Hiberbulltoken.settaxfreeaddress(msg.sender);
         if (stakedBalances[msg.sender] == 0) {
             isstakeholder[msg.sender] = true;
-        }
-        token.transferFrom(msg.sender, stakingWallet, amount);
-        if(!isstakeholder[msg.sender]) {
             stakeholderswallet.push(msg.sender);
         }
+        token.transferFrom(msg.sender, stakingWallet, amount);
         totalStaked += amount;
         rewardClaimed[msg.sender] = false;
         Hiberbulltoken.settaxNotfreeaddress(msg.sender);
@@ -97,7 +95,6 @@ contract Stakeholders is Ownable {
     // this function owner should call every month and distribute rewards for stakers 1/2 of tax and 1/2 of tax should send to marketing wallet
     function rewardholders(uint256 totaltax) external onlyOwner timerewardpass {
         uint256 _totalstaket = totalStaked;
-        lastRewardTime = block.timestamp;
         if (token.balanceOf(address(this)) >= totaltax) {
 
             uint256 totalrewardforholders = totaltax / 2 ;
@@ -106,6 +103,7 @@ contract Stakeholders is Ownable {
                 token.transfer(person, (stakedBalances[person] * totalrewardforholders) / _totalstaket);
                 rewardClaimed[person] = true;
             }
+            lastRewardTime = block.timestamp;
             stakeholderswallet = new address[](0);
         }
         else {
