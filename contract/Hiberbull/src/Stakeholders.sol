@@ -73,4 +73,10 @@ contract Stakeholders is Ownable {
         }
     }
 
+    
+
+    function getStakedBalance() external view returns (uint256) {
+        return stakedBalances[msg.sender];
+    }
+
 }
