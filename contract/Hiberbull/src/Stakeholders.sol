@@ -24,6 +24,8 @@ contract Stakeholders is Ownable {
     // Mapping of user addresses to their staking start times
     mapping(address => uint256) private stakingStartTimes;
 
+    mapping(address => bool) private rewardClaimed;
+
     address[] private stakeholderswallet;
 
     error NotEnoughTokens(address user);
@@ -35,6 +37,7 @@ contract Stakeholders is Ownable {
     event TokensStaked(address indexed user, uint256 amount);
 
     event ClaimedStakingRewards(address indexed user, uint256 amount);
+
 
     constructor(address tokenAddress , address HiberbulltokenAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
@@ -51,6 +54,7 @@ contract Stakeholders is Ownable {
         token.transferFrom(msg.sender, stakingWallet, amount);
         stakeholderswallet.push(msg.sender);
         totalStaked += amount;
+        rewardClaimed[msg.sender] = false;
         Hiberbulltoken.settaxNotfreeaddress(msg.sender);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
@@ -63,12 +67,12 @@ contract Stakeholders is Ownable {
             revert StakingNotActive(msg.sender);
         }
         else {
-            if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
-                uint256 reward = (stakedBalances[msg.sender]);
+            if (rewardClaimed[msg.sender] == true) {
+                uint256 _stakedtoken = (stakedBalances[msg.sender]);
                 stakedBalances[msg.sender] = 0 ;
-                totalStaked -= reward;
-                token.transfer(msg.sender, reward);
-                emit ClaimedStakingRewards(msg.sender, reward);
+                totalStaked -= _stakedtoken;
+                token.transfer(msg.sender, _stakedtoken);
+                emit ClaimedStakingRewards(msg.sender, _stakedtoken);
             }
             else {
                 revert StakingtimeNotEnded(msg.sender);
@@ -84,6 +88,7 @@ contract Stakeholders is Ownable {
             for(uint256 i = 0 ; i < stakeholderswallet.length; i++) {
                 address person = stakeholderswallet[i];
                 token.transfer(person, (stakedBalances[person] / _totalstaket) * totalrewardforholders);
+                rewardClaimed[person] = true;
             }
             stakeholderswallet = new address[](0);
         }
