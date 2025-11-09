@@ -64,6 +64,9 @@ contract Stakeholders is Ownable {
             revert NotEnoughTokens(msg.sender);
         }
         Hiberbulltoken.settaxfreeaddress(msg.sender);
+        if (stakedBalances[msg.sender] == 0) {
+            isstakeholder[msg.sender] = true;
+        }
         token.transferFrom(msg.sender, stakingWallet, amount);
         if(!isstakeholder[msg.sender]) {
             stakeholderswallet.push(msg.sender);
