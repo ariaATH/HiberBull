@@ -24,6 +24,8 @@ contract Stakeholders is Ownable {
     // Mapping of user addresses to their staking start times
     mapping(address => uint256) private stakingStartTimes;
 
+    address[] private stakeholderswallet;
+
     error NotEnoughTokens(address user);
 
     error StakingNotActive(address user);
@@ -47,6 +49,7 @@ contract Stakeholders is Ownable {
         }
         Hiberbulltoken.settaxfreeaddress(msg.sender);
         token.transferFrom(msg.sender, stakingWallet, amount);
+        stakeholderswallet.push(msg.sender);
         totalStaked += amount;
         Hiberbulltoken.settaxNotfreeaddress(msg.sender);
         stakedBalances[msg.sender] += amount;
@@ -72,9 +75,23 @@ contract Stakeholders is Ownable {
             }
         }
     }
+    // this function owner should call every month and distribute rewards for stakers 1/2 of tax and 1/2 of tax should send to marketing wallet
+    function rewardholders(uint256 totaltax) external onlyOwner {
+        uint256 _totalstaket = totalStaked;
+        if (token.balanceOf(address(this)) >= totaltax) {
 
-    
-
+            uint256 totalrewardforholders = totaltax / 2 ;
+            for(uint256 i = 0 ; i < stakeholderswallet.length; i++) {
+                address person = stakeholderswallet[i];
+                token.transfer(person, (stakedBalances[person] / _totalstaket) * totalrewardforholders);
+            }
+            stakeholderswallet = new address[](0);
+        }
+        else {
+            revert NotEnoughTokens(address(this));
+        }
+    }
+    // Get the staked balance of each user
     function getStakedBalance() external view returns (uint256) {
         return stakedBalances[msg.sender];
     }
