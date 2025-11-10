@@ -19,55 +19,100 @@ contract Stakeholders is Ownable {
     IHiberbullToken private immutable Hiberbulltoken;
     // Total amount of tokens staked
     uint256 private totalStaked;
+    // The last time rewards were distributed by owner
+    uint256 private lastRewardTime;
     // Mapping of user addresses to their staked token balances
     mapping(address => uint256) private stakedBalances;
     // Mapping of user addresses to their staking start times
     mapping(address => uint256) private stakingStartTimes;
 
+    mapping(address => bool) private rewardClaimed;
+
+    mapping(address => bool) private isstakeholder;
+
+    address[] private stakeholderswallet;
+
     error NotEnoughTokens(address user);
 
-    error StakingNotActive(address user);
-
     error StakingtimeNotEnded(address user);
+
+    modifier timerewardpass() {
+        require(block.timestamp >= lastRewardTime + 30 days, "Staking period not ended");
+        _;
+    }
+
+    modifier checkholder() {
+        require(isstakeholder[msg.sender], "Not a stakeholder");
+        _;
+    }
 
     event TokensStaked(address indexed user, uint256 amount);
 
     event ClaimedStakingRewards(address indexed user, uint256 amount);
 
-    constructor(address tokenAddress , address stakeholdersAddress) Ownable(msg.sender) {
+
+    constructor(address tokenAddress , address HiberbulltokenAddress) Ownable(msg.sender) {
         stakingWallet = address(this);
+        Hiberbulltoken = IHiberbullToken(HiberbulltokenAddress);
         token = IERC20(tokenAddress);
-        token.Settaxfreeaddress(address(this));
-        Hiberbulltoken = IHiberbullToken(stakeholdersAddress);
+        Hiberbulltoken.settaxfreeaddress(address(this));
+        lastRewardTime = block.timestamp;
     }
     // Stake tokens for one month
     function staketokenonemonth(uint256 amount) external{
         if(token.balanceOf(msg.sender) < amount) {
             revert NotEnoughTokens(msg.sender);
         }
-        Hiberbulltoken.Settaxfreeaddress(msg.sender);
-        IHiberbulltoken.Settaxfreeaddress(msg.sender);
+        Hiberbulltoken.settaxfreeaddress(msg.sender);
+        if (stakedBalances[msg.sender] == 0) {
+            isstakeholder[msg.sender] = true;
+            stakeholderswallet.push(msg.sender);
+        }
         token.transferFrom(msg.sender, stakingWallet, amount);
+        totalStaked += amount;
+        rewardClaimed[msg.sender] = false;
+        Hiberbulltoken.settaxNotfreeaddress(msg.sender);
         stakedBalances[msg.sender] += amount;
         stakingStartTimes[msg.sender] = block.timestamp;
         emit TokensStaked(msg.sender, amount);
 
     }
 
-    function unstaketoken() external {
-        if (stakedBalances[msg.sender] == 0) {
-            revert StakingNotActive(msg.sender);
-        }
-        else {
-            if (block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
-                uint256 reward = (stakedBalances[msg.sender]);
+    function unstaketoken() external checkholder{
+            if (rewardClaimed[msg.sender] == true || block.timestamp >= stakingStartTimes[msg.sender] + 30 days) {
+                uint256 _stakedtoken = (stakedBalances[msg.sender]);
                 stakedBalances[msg.sender] = 0 ;
-                token.transferFrom(stakingWallet, msg.sender, reward);
-                emit ClaimedStakingRewards(msg.sender, reward);
+                totalStaked -= _stakedtoken;
+                rewardClaimed[msg.sender] = false;
+                isstakeholder[msg.sender] = false;
+                token.transfer(msg.sender, _stakedtoken);
+                emit ClaimedStakingRewards(msg.sender, _stakedtoken);
             }
             else {
                 revert StakingtimeNotEnded(msg.sender);
             }
+    }
+    // this function owner should call every month and distribute rewards for stakers 1/2 of tax and 1/2 of tax should send to marketing wallet
+    function rewardholders(uint256 totaltax) external onlyOwner timerewardpass {
+        uint256 _totalstaket = totalStaked;
+        if (token.balanceOf(address(this)) >= totaltax) {
+
+            uint256 totalrewardforholders = totaltax / 2 ;
+            for(uint256 i = 0 ; i < stakeholderswallet.length; i++) {
+                address person = stakeholderswallet[i];
+                token.transfer(person, (stakedBalances[person] * totalrewardforholders) / _totalstaket);
+                rewardClaimed[person] = true;
+            }
+            lastRewardTime = block.timestamp;
+            stakeholderswallet = new address[](0);
+        }
+        else {
+            revert NotEnoughTokens(address(this));
         }
     }
+    // Get the staked balance of each user
+    function getStakedBalance() external view returns (uint256) {
+        return stakedBalances[msg.sender];
+    }
+
 }
