@@ -21,7 +21,7 @@ contract DeployHiberbull is Script {
 
         Stakeholders staking = new Stakeholders(address(token), address(token), marketingWallet);
 
-        token.setAuthorizedCaller(address(staking));
+        token.setAuthorizedCaller(address(staking)); 
 
         vm.stopBroadcast();
 
