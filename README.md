@@ -18,7 +18,7 @@ Fueled by community vibes and bullish dreams, HiberBull is here to bring the fun
 - **Chain ID**: 1328
 - **Token Address**: `0xa37ae76803b40Dc6Bb4F01DA58e85DAb11cF10C8`
 - **Staking Address**: `0x69D8a5a5b5325f921b779632FBaee9d7f23A686B`
-- **Explorer**: [seitrace.com]([[https://seitrace.com](https://testnet.seiscan.io/)](https://testnet.seiscan.io/))
+- **Explorer**: [View Token Contract](https://testnet.seiscan.io/address/0xa37ae76803b40Dc6Bb4F01DA58e85DAb11cF10C8)
 
 ## 📦 Tech Stack
 - Solidity
