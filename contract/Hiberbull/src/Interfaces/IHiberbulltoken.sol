@@ -1,24 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface IHiberbullToken {
-  /// @notice Transfers tokens to a specified address
-   function transfer(address to, uint256 amount) external returns (bool);
-   /// @notice Transfers tokens from one address to another
-   function transferFrom(address from,address to,uint256 amount) external returns (bool);
-   /// @notice Returns the token balance of a specified address
-   function balanceOf(address account) external view returns (uint256);
-   /// @notice Returns the total supply of tokens
-   function totalSupply() external view returns (uint256);
-   /// @notice Allows a spender to withdraw from the owner's account multiple times, up to the amount specified
-   function approve(address spender, uint256 amount) external returns (bool);
-
-   /// @notice Returns the remaining number of tokens that a spender is allowed to withdraw from the owner's account
-   function allowance(address owner, address spender) external view returns (uint256);
-   /// @notice Sets the tax-free address
-   function settaxfreeaddress(address wallet) external ; 
-   /// @notice Sets the tax-not-free address
-   function settaxNotfreeaddress(address wallet) external  ;
-
+    function transfer(address to, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+    function totalSupply() external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function settaxfreeaddress(address wallet) external;
+    function settaxNotfreeaddress(address wallet) external;
+    function setAuthorizedCaller(address caller) external;
 }
