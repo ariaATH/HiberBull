@@ -16,8 +16,8 @@ Fueled by community vibes and bullish dreams, HiberBull is here to bring the fun
 - **Network**: Sei Testnet (Atlantic-2)
 - **Token Standard**: ERC-20
 - **Chain ID**: 1328
-- **Token Address**: `0xa37ae76803b40Dc6Bb4F01DA58e85DAb11cF10C8`
-- **Staking Address**: `0x69D8a5a5b5325f921b779632FBaee9d7f23A686B`
+- **Token Address**: `0xEB34960c053eA6CeC3A2d5fF199980c9d7424a3a`
+- **Staking Address**: `0x69579ef8746730404e46B94B5a1dCf33f02b3506`
 - **Explorer**: [seitrace.com](https://seitrace.com)
 
 ## 📦 Tech Stack
