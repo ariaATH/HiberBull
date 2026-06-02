@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -19,7 +19,7 @@ contract Hiberbulltoken is ERC20, Ownable {
 
     constructor(uint16 _taxfee, address _stakeholders, address _airdropWallet)
         ERC20("Hiberbull", "HIBER")
-        Ownable(msg.sender)
+        Ownable()
     {
         taxWallet    = _stakeholders;
         taxfee       = _taxfee;

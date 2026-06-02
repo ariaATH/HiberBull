@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -38,7 +38,7 @@ contract Stakeholders is Ownable {
     event RewardsDistributed(uint256 holderReward, uint256 marketingReward);
 
     constructor(address tokenAddress, address hiberbullTokenAddress, address _marketingWallet)
-        Ownable(msg.sender)
+        Ownable()
     {
         token           = IERC20(tokenAddress);
         hiberbullToken  = IHiberbullToken(hiberbullTokenAddress);
