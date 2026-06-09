@@ -15,21 +15,17 @@ contract DeployHiberbull is Script {
 
         vm.startBroadcast(deployerKey);
 
-        uint64 currentNonce = vm.getNonce(deployer);
 
-        address predictedStaking = vm.computeCreateAddress(deployer, currentNonce + 1);
+        Hiberbulltoken token = new Hiberbulltoken(taxFee, deployer, airdropWallet);
 
-        Hiberbulltoken token = new Hiberbulltoken(taxFee, predictedStaking, airdropWallet);
-
+ 
         Stakeholders staking = new Stakeholders(
             address(token),
             address(token),
             marketingWallet
         );
 
-    
-        require(address(staking) == predictedStaking, "Address prediction failed");
-
+      
         token.setAuthorizedCaller(address(staking));
 
         vm.stopBroadcast();

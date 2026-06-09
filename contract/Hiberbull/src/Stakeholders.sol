@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Interfaces/IHiberbulltoken.sol";
 
 contract Stakeholders is Ownable {
-    IERC20 private immutable token;
-    IHiberbullToken private immutable hiberbullToken;
-    address private immutable marketingWallet;
+    IERC20 private token;
+    IHiberbullToken private hiberbullToken;
+    address private marketingWallet;
 
     uint256 private totalStaked;
     uint256 private lastRewardTime;
